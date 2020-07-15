@@ -1,6 +1,5 @@
 # CS50Blog
 CS50 Final Project (Web Track)
-CS50 Final Project
 
 This is a blogging website build using Django, HTML (with Bootstrap 4), CSS and some JavaScript and jQuery.
 The functionality of this website are:
