@@ -1,0 +1,55 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+    <h2>CS50 Final Project</h2>
+    <br>
+    <p> 
+        This is a blogging website build using Django, HTML (with Bootstrap 4), CSS and some JavaScript and jQuery.
+        The functionality of this website are:
+        <ul>
+            <li> Allow registered users to create a new blog post. Like/dislike blog post and leave comments. </li>
+            <li> Allow users to customise their profile. Choose and crop their desired profile image. Toggle between Light and Dark Mode. </li>
+            <li> Number of blog posts and comments per page are paginated to reduce clutter and improve loading time. </li>
+            <li> Blog Posts, comments, likes/dislikes and profile settings are saved to the database. </li>
+            <li> To save space in the server, old profile picture are deleted automatically when the users uploads a new profile picture.</li>
+            <li> Authors of the blog post/comments are able to update/delete their post/comments if desired. </li>
+        </ul>
+        <br>
+        Inspiration and References used for this project are as follows:
+        <ul>
+            <li> 
+                <a href="https://www.youtube.com/playlist?list=PL-osiE80TeTtoQCKZ03TU5fNfx2UY6U4p" target="_blank">Main project inspired by Corey Schafer Django tutorials.</a>
+            </li>
+            <li>
+                <a href="https://www.youtube.com/watch?v=dOIU773P1iw" target="_blank">Switch between light and dark mode.</a>
+            </li>
+            <li>
+                <a href="https://www.youtube.com/watch?v=PXqRPqDjDgc&t=1012s" target="_blank">Like and Dislike Button.</a>
+            </li>
+            <li>
+                <a href="https://djangocentral.com/creating-comments-system-with-django/" target="_blank">Leaving Comments within each Blog Post.</a>
+            </li>
+            <li>
+                <a href="https://pypi.org/project/django-cleanup/" target="_blank">Delete old profile picture when the user uploads a new one.</a>
+            </li>
+            <li>
+                <a href="https://simpleisbetterthancomplex.com/tutorial/2017/03/02/how-to-crop-images-in-a-django-application.html" target="_blank">Crop profile picture.</a>
+            </li>
+            <li>
+                <a href="https://simpleisbetterthancomplex.com/tutorial/2016/08/03/how-to-paginate-with-django.html" target="_blank">Pagination of blog pages and comments.</a>
+            </li>
+        </ul>
+        <br>
+        Future Improvements for the project can be implemented on the CS50 Sidebar:
+        <ul>
+            <li>Showing the latest post since we have tracked the date/time the post is created on the database.</li>
+            <li>Showing trending post based on likes/dislike ratio of each post.</li>
+            <li>Add some announcements if the website has some important updates (such as T&C) to notify all users.</li>
+            <li>Add a mini calender to show future events if any.</li>
+        </ul>
+        <br>
+        Please visit my <a href="https://github.com/Tingkai911" target="_blank">Github</a> to view my other projects.
+        <br>
+        Finally, a big thank you to the CS50 Team for this wonderful course.
+    </p>
+{% endblock content %}

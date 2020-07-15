@@ -1,0 +1,195 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required main tags  -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    
+    <!-- Google icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <!-- Custom CSS for dark or light mode -->
+    <link id="mystylesheet" rel="stylesheet" type="text/css" href="{% static 'blog/light.css' %}">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
+    <!-- jQuery cropperjs to crop images -->
+    <link href="{% static 'css/cropper.min.css' %}" rel="stylesheet">
+    <script src="{% static 'js/cropper.min.js' %}"></script>
+
+    {% if title %}
+        <title>CS50 Blog - {{ title }}</title>
+    {% else %}
+        <title>CS50 Blog</title>
+    {% endif %}
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <header class="site-header">
+        <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+          <div class="container">
+            <a class="navbar-brand mr-4" href="{% url 'blog-home' %}">CS50 Blog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarToggle">
+              <div class="navbar-nav mr-auto">
+                <a class="nav-item nav-link" href="{% url 'blog-home' %}">Home</a>
+                <a class="nav-item nav-link" href="{% url 'blog-about' %}">About</a>
+              </div>
+              <!-- Navbar Right Side -->
+              <div class="navbar-nav">
+                {% if user.is_authenticated %}
+                  <a class="nav-item nav-link" href="{% url 'post-create' %}">New Post</a>
+                  <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
+                  <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+                {% else %}
+                  <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+                  <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </nav>
+    </header>
+
+    <!-- Main Section that contains the content block -->
+    <main role="main" class="container">
+        <div class="row">
+          <div class="col-md-8">
+            <!-- Display flash messages -->
+            {% if messages %}
+              <div class="messages">
+                  {% for message in messages %}
+                    <div {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %} role="alert">
+                      {{ message }}
+                    </div>
+                  {% endfor %}
+              </div>
+            {% endif %}
+            <!-- Content block -->
+            {% block content %}{% endblock %}
+          </div>
+          <div class="col-md-4">
+            <div class="content-section">
+              <h3>CS50 Sidebar</h3>
+              <p class='text-muted'>Possible Future Implementations
+                <ul class="list-group">
+                  <li class="list-group-item list-group-item-light">Latest Posts</li>
+                  <li class="list-group-item list-group-item-light">Announcements</li>
+                  <li class="list-group-item list-group-item-light">Calendars</li>
+                  <li class="list-group-item list-group-item-light">Trending Posts</li>
+                </ul>
+              </p>
+            </div>
+          </div>
+        </div>
+    </main>
+
+    <!-- Switch between Light and Dark mode -->
+    <script type="text/javascript">
+
+      // from django documentation for AJAX calls
+      function getCookie(name) {
+          var cookieValue = null;
+          if (document.cookie && document.cookie !== '') {
+              var cookies = document.cookie.split(';');
+              for (var i = 0; i < cookies.length; i++) {
+                  var cookie = cookies[i].trim();
+                  // Does this cookie string begin with the name we want?
+                  if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                      cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                      break;
+                  }
+              }
+          }
+          return cookieValue;
+      }
+      var csrftoken = getCookie('csrftoken');
+
+      // load theme from local settings
+      var setTheme = localStorage.getItem('theme');
+      console.log("theme: ", setTheme);
+      if (setTheme == null || setTheme == "light") {
+        document.getElementById('mystylesheet').href = "{% static 'blog/light.css' %}";
+      } else {
+        document.getElementById('mystylesheet').href = "{% static 'blog/dark.css' %}";
+      }
+
+      // event listener to detect changes in profile settings page
+      document.addEventListener('DOMContentLoaded', function() {
+
+        loadSettings()
+        
+        document.getElementById("mode").onchange = function() {
+          var theme = document.getElementById('mode').value;
+          console.log('theme: ', theme);
+          
+          swapStyle(theme);
+        }
+
+      })
+
+      // swap between light and dark mode 
+      function swapStyle(theme) {
+        if(theme == 'light') {
+          document.getElementById('mystylesheet').href = "{% static 'blog/light.css' %}";
+        } else {
+          document.getElementById('mystylesheet').href = "{% static 'blog/dark.css' %}";
+        }
+        document.getElementById(theme).selected = true;
+        localStorage.setItem('theme', theme)
+        updateTheme(theme)
+      }
+      
+      // load theme from user's profile settings saved in the server
+      function loadSettings(){
+        var url = "{% url 'user_settings' %}"
+        fetch(url, {
+          method:'GET',
+          headers:{
+            'Content-type':'application/json'
+          }
+        })
+        .then((response) => response.json())
+        .then(function(data){
+  
+          console.log('Data:', data)
+  
+          var theme = data.theme;
+
+          if (theme == null) {
+            swapStyle('light')
+          } else {
+            swapStyle(theme)
+          }    
+  
+        })
+  
+      }
+      
+      // update user's profile settings in the server
+      function updateTheme(theme){
+        var url = "{% url 'update_theme' %}"
+        fetch(url, {
+          method:'POST',
+          headers:{
+            'Content-type':'application/json',
+            'X-CSRFToken':csrftoken,
+          },
+          body:JSON.stringify({'theme':theme})
+        })
+      }
+
+    </script>
+
+</body>
+</html>

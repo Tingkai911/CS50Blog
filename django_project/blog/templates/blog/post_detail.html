@@ -1,0 +1,119 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <article class="media content-section">
+        <img class="rounded-circle article-img" src='{{ post.author.profile.image.url }}'>
+        <div class="media-body">
+            <div class="article-metadata">
+                <a class="mr-2" href="{% url 'user-posts' object.author.username %}">{{ object.author }}</a>
+                <!-- format the way date is shown -->
+                <small class="text-muted">{{ object.date_posted|date:"F d, Y" }} {{ object.date_posted|time:"P" }}</small>
+                {% if object.author == user %}
+                    <div>
+                        <a class="btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-update' object.id %}">Update</a>
+                        <a class="btn-danger btn-sm mt-1 mb-1" href="{% url 'post-delete' object.id %}">Delete</a>
+                    </div>
+                {% endif %}
+            </div>
+            <h2 class="article-title">{{ object.title }}</h2>
+            <p class="article-content">{{ object.content }}</p>
+            <div style = "display: flex;">
+                <!-- Like Button -->
+                <form action="{% url 'like-post' object.pk %}" method="POST">
+                    {% csrf_token %}
+                    {% if liked %}
+                        <button type="submit" name="post_id" value="{{ object.id }}" class="btn btn-default">
+                            <i class="material-icons icon">thumb_up</i>
+                        </button>
+                    {% else %}
+                        <button type="submit" name="post_id" value="{{ object.id }}" class="btn btn-default">
+                            <i class="material-icons icon-inactive">thumb_up</i>
+                        </button>
+                    {% endif %} 
+                    - {{total_likes}} Likes
+                </form> 
+                <!-- Dislike Button -->
+                <form class = "ml-4" action="{% url 'dislike-post' object.pk %}" method="POST">  
+                    {% csrf_token %}
+                    {% if disliked %}
+                        <button type="submit" name="post_id" value="{{ object.id }}" class="btn btn-default">
+                            <i class="material-icons icon">thumb_down</i>
+                        </button>
+                    {% else %}
+                        <button type="submit" name="post_id" value="{{ object.id }}" class="btn btn-default">
+                            <i class="material-icons icon-inactive">thumb_down</i>
+                        </button>
+                    {% endif %}
+                    - {{ total_dislikes }} Dislikes
+                </form>           
+            </div>
+        </div>
+    </article>
+    <!-- Show Comments -->
+    <div class="col-md-8 media mb-4  mt-3 ">
+        <div class="media-body">
+          <!-- comments -->
+          <h3>{{ comments.paginator.count }} comments</h3>
+          {% for comment in comments %}
+            <div class="comments" style="padding: 2px;">
+                <img class="rounded-circle article-img-sm" src='{{ comment.user.profile.image.url }}'>
+                <span class="font-weight-bold">
+                    {{ comment.user.username }}
+                    <small class="text-muted ml-2">
+                        {{ comment.date_posted|date:"F d, Y" }} {{ object.date_posted|time:"P" }}
+                        {% if comment.user == user %}
+                            <a class="btn-danger btn-sm mt-1 mb-1 ml-2" href="{% url 'comment-delete' comment.pk object.id %}">Delete</a>
+                        {% endif %}
+                    </small>
+                </span>
+                <p>
+                    {{ comment.comment }}
+                </p>
+            </div>
+          {% endfor %}
+        </div>
+    </div>
+
+    <!-- Pagination for the comments -->
+    {% if comments.has_other_pages %}
+
+        <!-- Go to the First and Previous page -->
+        {% if comments.has_previous %}
+            <a class="btn btn-outline-info btn-sm mb-4" href="?page=1">First</a>
+            <a class="btn btn-outline-info btn-sm mb-4" href="?page={{ comments.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        <!-- Go to the +3 and -3 pages surrounding the previous page -->
+        {% for num in comments.paginator.page_range %}
+            {% if comments.number == num %}
+                <a class="btn btn-info btn-sm mb-4" href="?page={{ num }}">{{ num }}</a>
+            {% elif num > comments.number|add:'-3' and num < comments.number|add:'3' %}
+                <a class="btn btn-outline-info btn-sm mb-4" href="?page={{ num }}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+
+        <!-- Go to the Next and Last page -->
+        {% if comments.has_next %}
+            <a class="btn btn-outline-info btn-sm mb-4" href="?page={{ comments.next_page_number }}">Next</a>
+            <a class="btn btn-outline-info btn-sm mb-4" href="?page={{ comments.paginator.num_pages }}">Last</a>
+        {% endif %}
+        
+    {% endif %}
+
+    <!-- Add new comments -->
+    {% if user.is_authenticated %}
+        <div class="col-md-8 card mb-4  mt-3 content-section">
+            <div class="media-body">
+                <h4>Leave a comment</h4>
+                <form method="post" action="{% url 'comment-post' object.pk user.get_username %}" style="margin-top: 1.3em;">
+                    {% csrf_token %}
+                    {{ comment_form|crispy }}
+                    <button name="post_id" value="{{ object.id }}" type="submit" class="btn btn-primary btn-lg">Submit</button>
+                </form>
+            </div>
+        </div>
+    {% else %}
+        <h3> Sign-In to leave a comment </h3>
+    {% endif %}
+        <br>
+{% endblock content %}
