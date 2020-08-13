@@ -25,5 +25,5 @@ Future Improvements for the project can be implemented on the CS50 Sidebar:
 - Add some announcements if the website has some important updates (such as T&C) to notify all users.
 - Add a mini calender to show future events if any.
 
-Please visit my Github to view my other projects. Link: https://github.com/Tingkai911
+Please visit my Github to view my other projects. Link: https://github.com/Tingkai911 .
 Finally, a big thank you to the CS50 Team for this wonderful course.
