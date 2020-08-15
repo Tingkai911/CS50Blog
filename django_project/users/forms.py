@@ -36,17 +36,19 @@ class ProfileUpdateForm(forms.ModelForm):
         fields = ['image', 'x', 'y', 'width', 'height']
 
     # overwrite the save method to resize the image based on what we have cropped
-    def save(self, *args, **kwargs):
-        profile = super(ProfileUpdateForm, self).save(*args, **kwargs)
+    # commented out as it is now working with AWS
+    # def save(self, *args, **kwargs):
+    #     profile = super(ProfileUpdateForm, self).save(*args, **kwargs)
 
-        x = self.cleaned_data.get('x')
-        y = self.cleaned_data.get('y')
-        w = self.cleaned_data.get('width')
-        h = self.cleaned_data.get('height')
+    #     x = self.cleaned_data.get('x')
+    #     y = self.cleaned_data.get('y')
+    #     w = self.cleaned_data.get('width')
+    #     h = self.cleaned_data.get('height')
 
-        image = Image.open(profile.image)
-        cropped_image = image.crop((x, y, w+x, h+y))
-        resized_image = cropped_image.resize((200, 200), Image.ANTIALIAS)
-        resized_image.save(profile.image.path)
+    #     image = Image.open(profile.image)
+    #     cropped_image = image.crop((x, y, w+x, h+y))
+    #     resized_image = cropped_image.resize((200, 200), Image.ANTIALIAS)
+    #     # AWS S3 does not support absolute path with .save()
+    #     resized_image.save(profile.image.path)
 
-        return profile
+    #     return profile
