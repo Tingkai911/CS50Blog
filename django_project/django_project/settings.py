@@ -25,7 +25,7 @@ SECRET_KEY = os.environ.get('CS50-FINAL_PROJECT')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['cs50-final-project-blog.herokuapp.com']
 
 
 # Application definition
