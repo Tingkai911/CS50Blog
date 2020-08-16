@@ -13,10 +13,10 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
     <!-- Custom CSS for dark or light mode -->
-    {% if user.profile.theme == 'light' %}
-      <link id="mystylesheet" rel="stylesheet" type="text/css" href="{% static 'blog/light.css' %}">
-    {% else %}
+    {% if user.profile.theme == 'dark' %}
       <link id="mystylesheet" rel="stylesheet" type="text/css" href="{% static 'blog/dark.css' %}">
+    {% else %}
+      <link id="mystylesheet" rel="stylesheet" type="text/css" href="{% static 'blog/light.css' %}">
     {% endif %}
 
     <!-- Optional JavaScript -->
@@ -132,6 +132,14 @@
         }
 
       })
+
+      var setTheme = localStorage.getItem('theme');
+      console.log("theme: ", setTheme);
+      if (setTheme == null || setTheme == "light") {
+        document.getElementById('mystylesheet').href = "{% static 'blog/light.css' %}";
+      } else {
+        document.getElementById('mystylesheet').href = "{% static 'blog/dark.css' %}";
+      }
 
       // swap between light and dark mode 
       function swapStyle(theme) {
