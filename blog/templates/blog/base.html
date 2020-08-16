@@ -13,7 +13,11 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
     <!-- Custom CSS for dark or light mode -->
-    <link id="mystylesheet" rel="stylesheet" type="text/css" href="{% static 'blog/light.css' %}">
+    {% if user.profile.theme == 'light' %}
+      <link id="mystylesheet" rel="stylesheet" type="text/css" href="{% static 'blog/light.css' %}">
+    {% else %}
+      <link id="mystylesheet" rel="stylesheet" type="text/css" href="{% static 'blog/dark.css' %}">
+    {% endif %}
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -31,7 +35,7 @@
         <title>CS50 Blog</title>
     {% endif %}
 </head>
-<body onload="setMode()">
+<body>
     <!-- Navigation Bar -->
     <header class="site-header">
         <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
@@ -114,25 +118,6 @@
           return cookieValue;
       }
       var csrftoken = getCookie('csrftoken');
-
-      // load theme from local settings during startup
-      function setMode(){
-        var setTheme = localStorage.getItem('theme');
-        console.log("theme: ", setTheme);
-        if (setTheme == null || setTheme == "light") {
-          document.getElementById('mystylesheet').href = "{% static 'blog/light.css' %}";
-        } else {
-          document.getElementById('mystylesheet').href = "{% static 'blog/dark.css' %}";
-        }
-      }
-
-      // var setTheme = localStorage.getItem('theme');
-      // console.log("theme: ", setTheme);
-      // if (setTheme == null || setTheme == "light") {
-      //   document.getElementById('mystylesheet').href = "{% static 'blog/light.css' %}";
-      // } else {
-      //   document.getElementById('mystylesheet').href = "{% static 'blog/dark.css' %}";
-      // }
 
       // event listener to detect changes in profile settings page
       document.addEventListener('DOMContentLoaded', function() {
