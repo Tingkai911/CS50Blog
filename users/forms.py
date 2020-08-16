@@ -36,7 +36,7 @@ class ProfileUpdateForm(forms.ModelForm):
         fields = ['image', 'x', 'y', 'width', 'height']
 
     # overwrite the save method to resize the image based on what we have cropped
-    # commented out as it is now working with AWS
+    # commented out as it is not working with AWS
     # def save(self, *args, **kwargs):
     #     profile = super(ProfileUpdateForm, self).save(*args, **kwargs)
 
