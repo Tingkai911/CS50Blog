@@ -133,14 +133,6 @@
 
       })
 
-      var setTheme = localStorage.getItem('theme');
-      console.log("theme: ", setTheme);
-      if (setTheme == null || setTheme == "light") {
-        document.getElementById('mystylesheet').href = "{% static 'blog/light.css' %}";
-      } else {
-        document.getElementById('mystylesheet').href = "{% static 'blog/dark.css' %}";
-      }
-
       // swap between light and dark mode 
       function swapStyle(theme) {
         if(theme == 'light') {
@@ -149,7 +141,6 @@
           document.getElementById('mystylesheet').href = "{% static 'blog/dark.css' %}";
         }
         document.getElementById(theme).selected = true;
-        localStorage.setItem('theme', theme)
         updateTheme(theme)
       }
       
