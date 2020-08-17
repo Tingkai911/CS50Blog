@@ -10,6 +10,10 @@ The functionality of this website are:
 - To save space in the server, old profile picture are deleted automatically when the users uploads a new profile picture.
 - Authors of the blog post/comments are able to update/delete their post/comments if desired. 
 
+Currently, the profile images are stored in AWS S3 Buckets and the website is deployed using Heroku.
+
+This Project is deployed to Heroku, try it out. Link: https://cs50-final-project-blog.herokuapp.com/
+
 Inspiration and References used for this project are as follows:
 - Main project inspired by Corey Schafer Django tutorials. Link: https://www.youtube.com/playlist?list=PL-osiE80TeTtoQCKZ03TU5fNfx2UY6U4p
 - Switch between light and dark mode. Link: https://www.youtube.com/watch?v=dOIU773P1iw
